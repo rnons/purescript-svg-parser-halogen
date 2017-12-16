@@ -12,7 +12,7 @@ import Data.List as List
 import Data.String (fromCharArray)
 import Text.Parsing.StringParser (Parser, ParseError, runParser, try)
 import Text.Parsing.StringParser.Combinators (choice, manyTill, option, sepEndBy)
-import Text.Parsing.StringParser.String (anyChar, regex, string, whiteSpace)
+import Text.Parsing.StringParser.String (anyChar, regex, string, whiteSpace, skipSpaces)
 
 data SvgNode
   = SvgElement Element
@@ -74,7 +74,7 @@ closingOrChildrenParser element = defer \_ ->
 
 elementParser :: Parser SvgNode
 elementParser = defer \_ -> do
-  _ <- whiteSpace
+  skipSpaces
   openingParser >>=
     closingOrChildrenParser >>=
     pure <<< SvgElement
@@ -82,13 +82,13 @@ elementParser = defer \_ -> do
 
 textParser :: Parser SvgNode
 textParser = do
-  _ <- whiteSpace
+  skipSpaces
   SvgText <$> regex "[^<]+"
 
 
 commentParser :: Parser SvgNode
 commentParser = do
-  _ <- whiteSpace
+  skipSpaces
   comment <- string "<!--" *> manyTill anyChar (string "-->")
   pure $ SvgComment $ charListToString comment
 
@@ -101,7 +101,7 @@ nodeParser = defer \_ ->
 
 xmlDeclarationParser :: Parser String
 xmlDeclarationParser = do
-  _ <- whiteSpace
+  skipSpaces
   decl <- string "<?xml" *> manyTill anyChar (string "?>")
   pure $ charListToString decl
 
