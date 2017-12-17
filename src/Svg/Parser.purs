@@ -1,4 +1,13 @@
-module Svg.Parser where
+-- | A module to Parse an SVG document `String` as `SvgNode`.  If you are using
+-- | `purescript-halogen`, `Svg.Parser.Halogen` is for you. If you are using
+-- | other view libraries, you need to write an adapter to convert `SvgNode` to
+-- | the `HTML` type you are using.
+module Svg.Parser
+  ( SvgNode(..)
+  , Element(..)
+  , SvgAttribute(..)
+  , parseToSvgNode
+  ) where
 
 import Prelude
 import Control.Alt ((<|>))
@@ -14,6 +23,8 @@ import Text.Parsing.StringParser (Parser, ParseError, runParser, try)
 import Text.Parsing.StringParser.Combinators (choice, manyTill, option, sepEndBy)
 import Text.Parsing.StringParser.String (anyChar, regex, string, whiteSpace, skipSpaces)
 
+
+-- | A SVG node can be one of the three: SvgElement, SvgText or SvgComment.
 data SvgNode
   = SvgElement Element
   | SvgText String
@@ -23,12 +34,24 @@ derive instance eqSvgNode :: Eq SvgNode
 derive instance genericRepSvgNode :: Generic SvgNode _
 instance showSvgNode :: Show SvgNode where show = defer \_ -> genericShow
 
+-- | An Element consists of a tag name, a list of attributes, a list of children nodes.
+-- |
+-- | <svg xmlns="http://www.w3.org/2000/svg"></svg>
+-- |
+-- | will be parsed as
+-- |
+-- | ``` purescript
+-- | { name: "svg"
+-- | , attributes: [ SvgAttribute "xmlns" "http://www.w3.org/2000/svg" ]
+-- | , children: []
+-- | }
 type Element =
   { name :: String
   , attributes :: List SvgAttribute
   , children :: List SvgNode
   }
 
+-- | An attribute consists of attribute name and value
 data SvgAttribute = SvgAttribute String String
 
 derive instance eqSvgAttribute :: Eq SvgAttribute
@@ -105,6 +128,8 @@ xmlDeclarationParser = do
   decl <- string "<?xml" *> manyTill anyChar (string "?>")
   pure $ charListToString decl
 
+-- | Parse an SVG source `String` as `SvgNode`.
+-- | You can then use `SvgNode` to construct the `HTML` type you are using.
 parseToSvgNode :: String -> Either ParseError SvgNode
 parseToSvgNode input =
   runParser (option "" (try xmlDeclarationParser) *> nodeParser) input
