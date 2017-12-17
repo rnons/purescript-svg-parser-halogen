@@ -1,5 +1,11 @@
 # purescript-svg-parser-halogen
 
+<a href="https://pursuit.purescript.org/packages/purescript-svg-parser-halogen">
+  <img src="https://pursuit.purescript.org/packages/purescript-svg-parser-halogen/badge"
+       alt="purescript-svg-parser-halogen on Pursuit">
+  </img>
+</a>
+
 A library to inline SVG source string into halogen views.
 
 See [Demo](https://rnons.github.io/purescript-svg-parser-halogen) for an example.
