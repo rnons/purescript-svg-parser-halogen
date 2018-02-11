@@ -11,9 +11,9 @@ module Svg.Parser.Halogen
 import Prelude
 import Data.Bifunctor (lmap)
 import Data.Array (fromFoldable)
-import Data.Either (Either(Right))
+import Data.Either (Either(..))
 import Halogen.HTML (HTML, IProp, Namespace(Namespace), ElemName(ElemName),
-                     AttrName(AttrName), text, elementNS, attr)
+                     AttrName(AttrName), span, text, elementNS, attr)
 import Svg.Parser (SvgNode(..), Element, SvgAttribute(..), parseToSvgNode)
 
 ns :: Namespace
@@ -54,5 +54,6 @@ icon :: forall p r i. String -> Array (IProp r i) -> HTML p i
 icon input attrs =
   case parseToSvgNode input of
     Right (SvgElement element) -> svgElementToHtmlWithAttrs element attrs
-    _ -> text ""
-
+    _ ->
+      span [ attr (AttrName "style") "color: red;" ]
+      [ text "!SVG Parse Failed!" ]
