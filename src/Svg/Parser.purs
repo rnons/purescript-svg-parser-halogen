@@ -10,6 +10,7 @@ module Svg.Parser
   ) where
 
 import Prelude
+
 import Control.Alt ((<|>))
 import Control.Lazy (defer)
 import Data.Array (fromFoldable)
@@ -20,8 +21,8 @@ import Data.List (List)
 import Data.List as List
 import Data.String (fromCharArray)
 import Text.Parsing.StringParser (Parser, ParseError, runParser, try)
-import Text.Parsing.StringParser.Combinators (choice, manyTill, option, sepEndBy)
-import Text.Parsing.StringParser.String (anyChar, regex, string, whiteSpace, skipSpaces)
+import Text.Parsing.StringParser.Combinators (lookAhead, many, manyTill, option, sepEndBy)
+import Text.Parsing.StringParser.String (anyChar, regex, skipSpaces, string, whiteSpace)
 
 
 -- | A SVG node can be one of the three: SvgElement, SvgText or SvgComment.
@@ -76,22 +77,20 @@ attributeParser = do
 
 openingParser :: Parser Element
 openingParser = do
-  _ <- string "<"
+  void $ string "<"
   tagName <- regex "[^/> ]+"
-  attributes <- whiteSpace *> sepEndBy attributeParser whiteSpace
+  attributes <- skipSpaces *> sepEndBy attributeParser whiteSpace
   pure $ mkElement tagName attributes List.Nil
 
 closingOrChildrenParser :: Element -> Parser Element
 closingOrChildrenParser element = defer \_ ->
-  choice
-    [ whiteSpace *> string "/>" *> pure element
-    , childrenParser
-    ]
+  try (skipSpaces *> string "/>" *> pure element) <|>
+  childrenParser
   where
     childrenParser = do
-      _ <- whiteSpace *> string ">"
-      children <- manyTill nodeParser
-                 (whiteSpace <* string ("</" <> element.name <> ">"))
+      void $ skipSpaces *> string ">"
+      children <- many $ try nodeParser
+      void $ skipSpaces *> string ("</" <> element.name <> ">")
       pure $ element { children = children }
 
 
@@ -128,8 +127,14 @@ xmlDeclarationParser = do
   decl <- string "<?xml" *> manyTill anyChar (string "?>")
   pure $ charListToString decl
 
+beforeSvgParser :: Parser String
+beforeSvgParser = do
+  charListToString <$> manyTill anyChar (lookAhead $ string "<svg")
+
 -- | Parse an SVG source `String` as `SvgNode`.
 -- | You can then use `SvgNode` to construct the `HTML` type you are using.
+-- |
+-- | NOTE: Everything before `<svg` and after `</svg>` are ignored.
 parseToSvgNode :: String -> Either ParseError SvgNode
 parseToSvgNode input =
-  runParser (option "" (try xmlDeclarationParser) *> nodeParser) input
+  runParser (option "" (try beforeSvgParser) *> nodeParser) input
