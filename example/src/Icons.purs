@@ -8,6 +8,7 @@ foreign import check :: String
 foreign import code :: String
 foreign import eye :: String
 foreign import github :: String
+foreign import heart :: String
 
 type Icon = forall p r i. Array (IProp r i) -> HTML p i
 
@@ -22,3 +23,6 @@ iconEye = icon eye
 
 iconGithub :: Icon
 iconGithub = icon github
+
+iconHeart :: Icon
+iconHeart = icon heart
