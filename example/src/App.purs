@@ -48,7 +48,7 @@ render state =
   where
   checkClassName = if state.on then "check-icon on" else "check-icon"
   repoUrl = "https://github.com/rnons/purescript-svg-parser-halogen"
-  demoSourceUrl = repoUrl <> "/tree/gh-pages"
+  demoSourceUrl = repoUrl <> "/tree/master/example"
 
 app :: forall m. H.Component HH.HTML Query Unit Void m
 app =
