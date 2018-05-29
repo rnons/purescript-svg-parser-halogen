@@ -66,5 +66,5 @@ app =
   eval :: Query ~> H.ComponentDSL State Query Void m
   eval = case _ of
     Toggle next -> do
-      H.modify (\state -> { on: not state.on })
+      void $ H.modify (\state -> { on: not state.on })
       pure next
