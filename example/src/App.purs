@@ -17,7 +17,7 @@ type State = { on:: Boolean }
 className :: forall r i. String -> HH.IProp r i
 className = HH.attr (HH.AttrName "class")
 
-render :: State -> H.ComponentHTML Query
+render :: ∀ m. State -> H.ComponentHTML Query () m
 render state =
   HH.div_
     [ HH.h3_
@@ -57,13 +57,15 @@ app =
     , render
     , eval
     , receiver: const Nothing
+    , initializer: Nothing
+    , finalizer: Nothing
     }
   where
 
   initialState :: State
   initialState = { on: false }
 
-  eval :: Query ~> H.ComponentDSL State Query Void m
+  eval :: Query ~> H.HalogenM State Query () Void m
   eval = case _ of
     Toggle next -> do
       void $ H.modify (\state -> { on: not state.on })
