@@ -22,7 +22,7 @@ import Data.List as List
 import Data.String.CodeUnits (fromCharArray)
 import Text.Parsing.StringParser (Parser, ParseError, runParser, try)
 import Text.Parsing.StringParser.Combinators (lookAhead, many, manyTill, option, sepEndBy)
-import Text.Parsing.StringParser.String (anyChar, regex, skipSpaces, string, whiteSpace)
+import Text.Parsing.StringParser.CodeUnits (anyChar, regex, skipSpaces, string, whiteSpace)
 
 
 -- | A SVG node can be one of the three: SvgElement, SvgText or SvgComment.
