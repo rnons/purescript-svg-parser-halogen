@@ -38,9 +38,3 @@ className = HH.attr (HH.AttrName "class")
 render state =
   iconCode [ className "icon" ]
 ```
-
-## How it works
-
-`Svg.Parser` parses SVG source `String` as `SvgNode`. `Svg.Parser.Halogen` converts `SvgNode` to halogen `HTML`. You can also write adapters to convert `SvgNode` to the `HTML` type of other view libraries.
-
-If you want to `Svg.Parser` with other view libraries, I can release it as a separate package, let me know if you are interested.
