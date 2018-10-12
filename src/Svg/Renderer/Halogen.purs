@@ -1,6 +1,6 @@
 -- | A module to convert `SvgNode` to halogen `HTML`. Normally you should only
 -- | need the `icon` function. See [demo](https://rnons.github.io/purescript-svg-parser-halogen) for an example.
-module Svg.Parser.Halogen
+module Svg.Renderer.Halogen
   ( svgElementToHtml
   , svgElementToHtmlWithAttrs
   , svgNodeToHtml

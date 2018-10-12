@@ -2,7 +2,7 @@ module Icons where
 
 import Halogen.HTML (HTML, IProp)
 
-import Svg.Parser.Halogen (icon)
+import Svg.Renderer.Halogen (icon)
 
 foreign import check :: String
 foreign import code :: String

@@ -1,6 +1,6 @@
 {
   "name": "purescript-svg-parser-halogen",
-  "description": "A library to inline SVG source string into halogen views",
+  "description": "A library to inline SVG string into halogen views",
   "keywords": [
     "purescript",
     "halogen",
@@ -20,8 +20,7 @@
   ],
   "dependencies": {
     "purescript-prelude": "^4.0.0",
-    "purescript-string-parsers": "^5.0.0",
-    "purescript-generics-rep": "^6.0.0",
+    "purescript-svg-parser": "^1.0.0",
     "purescript-halogen": "^4.0.0"
   },
   "devDependencies": {
