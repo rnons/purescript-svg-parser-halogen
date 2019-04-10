@@ -8,6 +8,8 @@
 
 A library to inline SVG source string into halogen views.
 
+You might be interested in [svgen](https://github.com/nonbili/svgen), a CLI tool to generate an icons module from svg files.
+
 See [Demo](https://rnons.github.io/purescript-svg-parser-halogen) for an example.
 
 ## How to use
