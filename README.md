@@ -15,7 +15,7 @@ See [Demo](https://rnons.github.io/purescript-svg-parser-halogen) for an example
 ## How to use
 
 ```purescript
-import Svg.Parser.Halogen (icon)
+import Svg.Renderer.Halogen (icon)
 
 -- | You can use FFI and webpack raw-loader to load external SVG files
 code :: String
