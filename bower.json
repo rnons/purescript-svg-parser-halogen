@@ -19,9 +19,8 @@
     "docs"
   ],
   "dependencies": {
-    "purescript-prelude": "^4.0.0",
     "purescript-svg-parser": "^1.0.0",
-    "purescript-halogen": "https://github.com/slamdata/purescript-halogen.git#e43096ccde699f68f1803acd23bab493a7190e2c"
+    "purescript-halogen": "^5.0.0-rc.6"
   },
   "devDependencies": {
     "purescript-psci-support": "^4.0.0"

@@ -2,22 +2,24 @@ module App where
 
 import Prelude
 
+import Data.Const (Const)
 import Data.Maybe (Maybe(..))
-
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as E
 import Halogen.HTML.Properties as P
 import Icons (iconCheck, iconCode, iconEye, iconGithub, iconHeart)
 
-data Query a = Toggle a
+type Query = Const Void
+
+data Action = Toggle
 
 type State = { on:: Boolean }
 
 className :: forall r i. String -> HH.IProp r i
 className = HH.attr (HH.AttrName "class")
 
-render :: ∀ m. State -> H.ComponentHTML Query () m
+render :: forall m. State -> H.ComponentHTML Action () m
 render state =
   HH.div_
     [ HH.h3_
@@ -25,7 +27,7 @@ render state =
     , HH.div_
       [ iconCheck
           [ className checkClassName
-          , E.onClick (E.input_ Toggle)
+          , E.onClick $ Just <<< const Toggle
           ]
       , HH.text (show state.on)
       ]
@@ -51,22 +53,19 @@ render state =
   demoSourceUrl = repoUrl <> "/tree/master/example"
 
 app :: forall m. H.Component HH.HTML Query Unit Void m
-app =
-  H.component
-    { initialState: const initialState
-    , render
-    , eval
-    , receiver: const Nothing
-    , initializer: Nothing
-    , finalizer: Nothing
-    }
+app = H.mkComponent
+  { initialState: const initialState
+  , render
+  , eval: H.mkEval $ H.defaultEval
+      { handleAction = handleAction
+      }
+  }
   where
 
   initialState :: State
   initialState = { on: false }
 
-  eval :: Query ~> H.HalogenM State Query () Void m
-  eval = case _ of
-    Toggle next -> do
-      void $ H.modify (\state -> { on: not state.on })
-      pure next
+  handleAction :: Action -> H.HalogenM State Action () Void m Unit
+  handleAction = case _ of
+    Toggle -> do
+      H.modify_ (\state -> { on: not state.on })

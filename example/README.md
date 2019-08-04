@@ -1,6 +1,7 @@
 # purescript-svg-parser-halogen example
 
 ```
-pulp -w build
+yarn
+pulp -w build -I ../src
 yarn start
 ```
