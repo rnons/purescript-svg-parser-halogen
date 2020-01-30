@@ -1,8 +1,8 @@
-exports.check = require("svg/check.svg");
-exports.code = require("svg/code.svg");
+exports.check = require("svg/check.svg").default;
+exports.code = require("svg/code.svg").default;
 
-exports.eye = require("svg/eye.svg");
+exports.eye = require("svg/eye.svg").default;
 
-exports.github = require("svg/mark-github.svg");
+exports.github = require("svg/mark-github.svg").default;
 
-exports.heart = require("svg/heart.svg");
+exports.heart = require("svg/heart.svg").default;
