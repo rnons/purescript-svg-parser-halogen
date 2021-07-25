@@ -9,7 +9,8 @@
   ],
   "dependencies": {
     "purescript-halogen": "^6.0.0",
-    "purescript-string-parsers": "^6.0.0"
+    "purescript-string-parsers": "^6.0.0",
+    "purescript-svg-parser": "^2.0.0"
   },
   "devDependencies": {
     "purescript-psci-support": "^5.0.0"
