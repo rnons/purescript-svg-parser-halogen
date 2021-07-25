@@ -9,7 +9,10 @@ import Halogen.HTML as HH
 import Halogen.HTML.Events as E
 import Halogen.HTML.Properties as P
 import Icons (iconCheck, iconCode, iconEye, iconGithub, iconHeart)
+import Control.Monad.State (class MonadState)
+import Effect.Aff.Class (class MonadAff)
 
+type Query :: forall k. k -> Type
 type Query = Const Void
 
 data Action = Toggle
@@ -27,7 +30,7 @@ render state =
     , HH.div_
       [ iconCheck
           [ className checkClassName
-          , E.onClick $ Just <<< const Toggle
+          , E.onClick $ const Toggle
           ]
       , HH.text (show state.on)
       ]
@@ -52,8 +55,8 @@ render state =
   repoUrl = "https://github.com/rnons/purescript-svg-parser-halogen"
   demoSourceUrl = repoUrl <> "/tree/master/example"
 
-app :: forall m. H.Component HH.HTML Query Unit Void m
-app = H.mkComponent
+component :: forall query input output m. MonadAff m => H.Component query input output m
+component = H.mkComponent
   { initialState: const initialState
   , render
   , eval: H.mkEval $ H.defaultEval
@@ -65,7 +68,9 @@ app = H.mkComponent
   initialState :: State
   initialState = { on: false }
 
-  handleAction :: Action -> H.HalogenM State Action () Void m Unit
-  handleAction = case _ of
-    Toggle -> do
-      H.modify_ (\state -> { on: not state.on })
+handleAction :: forall m.
+  MonadState State m =>
+  Action -> m Unit
+handleAction = case _ of
+  Toggle -> do
+    H.modify_ (\state -> { on: not state.on })
