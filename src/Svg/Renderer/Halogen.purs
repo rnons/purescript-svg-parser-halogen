@@ -39,7 +39,7 @@ svgElementToHtmlWithAttrs ele newAttrs =
 svgNodeToHtml :: forall p i. SvgNode -> HTML p i
 svgNodeToHtml (SvgElement element) = svgElementToHtml element
 svgNodeToHtml (SvgText str) = text str
-svgNodeToHtml (SvgComment str) = text ""
+svgNodeToHtml (SvgComment _str) = text ""
 
 -- | If you don't want to deal with the `SvgNode` type, you can use this function
 -- | to parse a `String` as `HTML` directly.

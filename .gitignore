@@ -1,7 +1,6 @@
-bower_components
+.spago
 node_modules
 yarn.lock
-
 .psc-ide-port
 .psci_modules
 output
